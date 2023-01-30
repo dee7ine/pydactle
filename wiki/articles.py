@@ -16,6 +16,7 @@ class WikiContentParser:
 
     def __init__(self) -> None:
         
+        #test
         article_text = self.get_article_text(title=self.get_random_article_title())
         article_text = self.clean_text(text=article_text, clear_new_lines=False)
         print(article_text)
