@@ -11,15 +11,17 @@ PARAMS = {
     "rnlimit": "5"
 }
 
-class Wiki_Content_Parser():
-    
-    def __init__(self):
+
+class WikiContentParser:
+
+    def __init__(self) -> None:
         
         article_text = self.get_article_text(title='Belgian Ship A4')
         article_text = self.clean_text(text=article_text)
         print(article_text)
-    
-    def get_article_list(self) -> None:
+
+    @staticmethod
+    def get_article_list() -> None:
         session = requests.Session()
         response = session.get(url=API_URL, params=PARAMS)
         
@@ -32,40 +34,36 @@ class Wiki_Content_Parser():
 
     @DeprecationWarning
     def random_article(self) -> None:
-        """
-        Get random wikipedia article
-        
-        :return 
-        """
         
         page = requests.get("https://en.wikipedia.org/api/rest_v1/page/random/summary").json()
         print(page)
-        
-    def get_random_article_title(self) -> None:
+
+    @staticmethod
+    def get_random_article_title() -> None:
         url = requests.get('https://en.wikipedia.org/wiki/Special:Random')
         soup = BeautifulSoup(url.content, 'html.parser')
         title = soup.find(class_='firstHeading').text
         text = soup.p.text
         print(f'Article title: {title}')
         print(f'Article text: {text}')
-        
-    def get_article_text(self, title: str) -> str:
-        wiki = wikipedia.page(title) # 'Belgian Ship A4'
+
+    @staticmethod
+    def get_article_text(title: str) -> str:
+        wiki = wikipedia.page(title)  # 'Belgian Ship A4'
         text_content = wiki.content
         
         return text_content
-        
-    def clean_text(self, text: str) -> None:
+
+    @staticmethod
+    def clean_text(text: str) -> str:
         
         text = re.sub(r'==.*?==+', '', text)
-        text = text.replace('\n', '')
+        #  text = text.replace('\n', '')
         
         return text
-        
-        
-    
+
       
 if __name__ == "__main__":
     
-    content_parser = Wiki_Content_Parser()
+    content_parser = WikiContentParser()
     
