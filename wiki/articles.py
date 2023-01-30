@@ -2,6 +2,7 @@ import requests
 import wikipedia
 import re
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 API_URL = "https://en.wikipedia.org/w/api.php"
 PARAMS = {
@@ -41,15 +42,18 @@ class WikiContentParser:
 
     @staticmethod
     def get_random_article_title() -> str:
+        with open('titles_temp.txt', 'a') as titles:
         
-        url = requests.get('https://en.wikipedia.org/wiki/Special:Random')
-        soup = BeautifulSoup(url.content, 'html.parser')
-        title = soup.find(class_='firstHeading').text
-        text = soup.p.text
-        print(f'Article title: {title}')
-        print(f'Article text: {text}')
-        
-        return title 
+            url = requests.get('https://en.wikipedia.org/wiki/Special:Random')
+            soup = BeautifulSoup(url.content, 'html.parser')
+            title = soup.find(class_='firstHeading').text
+            
+            print(f'Article title: {title}')
+            
+            titles.write(datetime.today().strftime('%Y-%m-%d') + f' {title}' + '\n')
+            titles.close()
+            
+            return title 
 
     @staticmethod
     def get_article_text(title: str) -> str:
