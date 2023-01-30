@@ -3,6 +3,7 @@ import wikipedia
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime
+from pathlib import Path
 
 API_URL = "https://en.wikipedia.org/w/api.php"
 PARAMS = {
@@ -12,14 +13,21 @@ PARAMS = {
     "rnlimit": "5"
 }
 
+PROJECT_NAME = 'pydactle'
+CURRENT_DIR = Path(__file__)
+SOURCE_ROOT = [p for p in CURRENT_DIR.parents if p.parts[-1] == PROJECT_NAME][0]
+
+class Parameters:
+    COMMON_WORDS = []
+
 
 class WikiContentParser:
 
     def __init__(self) -> None:
         
-        article_text = self.get_article_text(title=self.get_random_article_title())
-        article_text = self.clean_text(text=article_text, clear_new_lines=False)
-        print(article_text)
+        self.article_text, self.article_title = self.parse_content()
+        print(f'Article title:  {self.article_title}')
+        print(f'Article content:\n{self.article_text}')
 
     @staticmethod
     def get_article_list() -> None:
@@ -48,8 +56,6 @@ class WikiContentParser:
             soup = BeautifulSoup(url.content, 'html.parser')
             title = soup.find(class_='firstHeading').text
             
-            print(f'Article title: {title}')
-            
             titles.write(datetime.today().strftime('%Y-%m-%d') + f' {title}' + '\n')
             titles.close()
             
@@ -67,11 +73,18 @@ class WikiContentParser:
     def clean_text(text: str, clear_new_lines: bool) -> str:
         
         text = re.sub(r'==.*?==+', '', text)
-        
         if clear_new_lines: text = text.replace('\n', '')
         
         return text
-
+    
+    def parse_content(self) -> tuple[str, str]:
+        
+        article_title = self.get_random_article_title()
+        
+        article_text = self.get_article_text(title=self.get_random_article_title())
+        article_text = self.clean_text(text=article_text, clear_new_lines=False)
+        
+        return article_text, article_title
       
 if __name__ == "__main__":
     
