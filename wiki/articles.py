@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import requests
 import wikipedia
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 from pathlib import Path
+from abc import ABC, abstractmethod
 
 API_URL = "https://en.wikipedia.org/w/api.php"
 PARAMS = {
@@ -26,39 +29,29 @@ class Parameters:
                     'in','or', 'do', 'into', 'who', 'how',		
                     'that', 'by', 'if', 'but', 'will', 'not',
                     'up', 'other', 'what', 'more', 'for', 'on',
-                    'all', 'about', 'go', 'out', 'as', 'with', 'when',
+                    'all', 'about', 'go', 'out', 'as', 'with',
                     'then', 'no', 'may', 'so', 'such', 'despite', 
-                    'beneath', 'now', 'during', 'after', 'was', 'were',
-                    'because', 'unlike', 'unless', 'through', 'onto',
-                    'unto', 'beyond']
+                    'beneath', 'now', 'during', 'after', 'was', 
+                    'because', 'unlike', 'unless', 'through',
+                    'onto', 'when', 'unto', 'beyond', 'off', 'were']
     
     COMMON_WORDS_UPPERCASE = (word.upper() for word in COMMON_WORDS)
-    COMMON_WORDS_CAPITALIZE = (word.capitalize() for word in COMMON_WORDS)
+    COMMON_WORDS_CAPITAL = (word.capitalize() for word in COMMON_WORDS)
     
     SEPARATORS = [' ', '-', '.', ',', '(', ')', '[', ']', ':']
 
-
-class WikiContentParser:
-
+ 
+class WikiScrapper(ABC):
+    
+    article_title: str
+    article_text: str
+    
     def __init__(self) -> None:
         
-        self.article_text, self.article_title = self.parse_content()
-        print(f'Article title:  {self.article_title}')
-        print(f'Article content:\n{self.article_text}')
-
-    @staticmethod
-    def get_article_list() -> None:
-        
-        session = requests.Session()
-        response = session.get(url=API_URL, params=PARAMS)
-        
-        data = response.json()
-        
-        random_articles = data["query"]["random"]
-        
-        for article in random_articles:
-            print(article["title"])
-
+        self.article_title, self.article_text  = self.parse_content()
+        print(f'Article title:  {self.article.title}')
+        print(f'Article content:\n{self.article.text}')
+    
     @DeprecationWarning
     def random_article(self) -> None:
         
@@ -77,7 +70,7 @@ class WikiContentParser:
             titles.close()
             
             return title 
-
+        
     @staticmethod
     def get_article_text(title: str) -> str:
         
@@ -85,6 +78,38 @@ class WikiContentParser:
         text_content = wiki.content
         
         return text_content
+        
+    @abstractmethod
+    def clean_text(text: str, clear_new_lines: bool) -> str:
+        """Clears HTML formatting from article
+
+        :param text
+        :param clear_new_lines
+        
+        :return
+        """
+        pass
+    
+    def parse_content(self) -> tuple[str, str]:
+        
+        article_title = self.get_random_article_title()
+        
+        article_text = self.get_article_text(title=self.get_random_article_title())
+        article_text = self.clean_text(text=article_text, clear_new_lines=False)
+        
+        return article_title, article_text
+    
+    def filter_article():
+        ...
+
+class WikiArticleParser(WikiScrapper, Parameters):
+
+    def __init__(self) -> None:
+        super(WikiScrapper, self).__init__()
+        
+        self.article_text, self.article_title = self.parse_content()
+        print(f'Article title:  {self.article_title}')
+        print(f'Article content:\n{self.article_text}')
 
     @staticmethod
     def clean_text(text: str, clear_new_lines: bool) -> str:
@@ -94,16 +119,12 @@ class WikiContentParser:
         
         return text
     
-    def parse_content(self) -> tuple[str, str]:
+    def filter_article(self):
         
-        article_title = self.get_random_article_title()
+        print(self.COMMON_WORDS)
         
-        article_text = self.get_article_text(title=self.get_random_article_title())
-        article_text = self.clean_text(text=article_text, clear_new_lines=False)
-        
-        return article_text, article_title
       
 if __name__ == "__main__":
     
-    content_parser = WikiContentParser()
+    article_parser = WikiArticleParser()
     
