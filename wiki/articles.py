@@ -18,7 +18,24 @@ CURRENT_DIR = Path(__file__)
 SOURCE_ROOT = [p for p in CURRENT_DIR.parents if p.parts[-1] == PROJECT_NAME][0]
 
 class Parameters:
-    COMMON_WORDS = []
+    COMMON_WORDS = ['the', 'at', 'there', 'some', 'my',
+                    'of', 'be', 'use', 'her', 'than',
+                    'and', 'this','an'	,'would','first',
+                    'a'	,'have'	,'each'	,'make'	,'water',
+                    'to','from'	,'which','like'	,'been',
+                    'in','or', 'do', 'into', 'who', 'how',		
+                    'that', 'by', 'if', 'but', 'will', 'not',
+                    'up', 'other', 'what', 'more', 'for', 'on',
+                    'all', 'about', 'go', 'out', 'as', 'with', 'when',
+                    'then', 'no', 'may', 'so', 'such', 'despite', 
+                    'beneath', 'now', 'during', 'after', 'was', 'were',
+                    'because', 'unlike', 'unless', 'through', 'onto',
+                    'unto', 'beyond']
+    
+    COMMON_WORDS_UPPERCASE = (word.upper() for word in COMMON_WORDS)
+    COMMON_WORDS_CAPITALIZE = (word.capitalize() for word in COMMON_WORDS)
+    
+    SEPARATORS = [' ', '-', '.', ',', '(', ')', '[', ']', ':']
 
 
 class WikiContentParser:
