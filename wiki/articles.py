@@ -41,7 +41,7 @@ class Parameters:
     SEPARATORS = [' ', '-', '.', ',', '(', ')', '[', ']', ':']
 
  
-class WikiScrapper(ABC, Parameters):
+class WikiScrapper(ABC):
     
     article_title: str
     article_text: str
@@ -102,7 +102,7 @@ class WikiScrapper(ABC, Parameters):
     def filter_article():
         ...
 
-class WikiArticleParser(WikiScrapper):
+class WikiArticleParser(WikiScrapper, Parameters):
 
     def __init__(self) -> None:
         super(WikiScrapper, self).__init__()
