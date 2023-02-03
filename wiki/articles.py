@@ -6,7 +6,6 @@ import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 from pathlib import Path
-from abc import ABC, abstractmethod
 from typing import TypeVar
 
 
@@ -55,16 +54,16 @@ class WikiScrapper:
     
     def __init__(self) -> None:
         
-        self.article_title, self.article_text  = self.parse_content()
+        self.article_title, self.article_text  = self._parse_content()
     
     @DeprecationWarning
-    def random_article(self) -> None:
+    def _random_article(self) -> None:
         
         page = requests.get("https://en.wikipedia.org/api/rest_v1/page/random/summary").json()
         print(page)
 
     @staticmethod
-    def get_random_article_title() -> str:
+    def _get_random_article_title() -> str:
         with open('titles_temp.txt', 'a') as titles:
         
             url = requests.get('https://en.wikipedia.org/wiki/Special:Random')
@@ -77,7 +76,7 @@ class WikiScrapper:
             return title 
         
     @staticmethod
-    def get_article_text(title: str) -> str:
+    def _get_article_text(title: str) -> str:
         
         wiki = wikipedia.page(title)  # 'Belgian Ship A4'
         text_content = wiki.content
@@ -85,10 +84,10 @@ class WikiScrapper:
         return text_content
         
     
-    def parse_content(self) -> tuple[str, str]:
+    def _parse_content(self) -> tuple[str, str]:
         
-        article_title = self.get_random_article_title()
-        article_text = self.get_article_text(title=self.get_random_article_title())
+        article_title = self._get_random_article_title()
+        article_text = self._get_article_text(title=article_title)
         
         return article_title, article_text
         
