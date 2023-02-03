@@ -1,10 +1,6 @@
 from __future__ import annotations
 
-try:
-    import requests
-except ImportError:
-    import requests
-
+import requests
 import wikipedia
 import re
 from bs4 import BeautifulSoup
@@ -12,6 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from abc import ABC, abstractmethod
 from typing import TypeVar
+
 
 article_body = TypeVar('article_body', bound=str)
 
@@ -43,10 +40,12 @@ class Parameters:
                     'because', 'unlike', 'unless', 'through',
                     'onto', 'when', 'unto', 'beyond', 'off', 'were']
     
-    COMMON_WORDS_UPPERCASE: list[str] = (word.upper() for word in COMMON_WORDS)
-    COMMON_WORDS_CAPITAL: list[str] = (word.capitalize() for word in COMMON_WORDS)
+    COMMON_WORDS_UPPERCASE: list[str] = [word.upper() for word in COMMON_WORDS]
+    COMMON_WORDS_CAPITAL: list[str] = [word.capitalize() for word in COMMON_WORDS]
     
-    SEPARATORS: list[str] = [' ', '-', '.', ',', '(', ')', '[', ']', ':']
+    SEPARATORS: list[str] = [' ', '-', '.', ',', '(', ')', '[', ']', ':', '\n', '\t']
+    
+    WORDS = COMMON_WORDS + COMMON_WORDS_UPPERCASE + COMMON_WORDS_CAPITAL + SEPARATORS
 
  
 class WikiScrapper:
@@ -92,19 +91,21 @@ class WikiScrapper:
         article_text = self.get_article_text(title=self.get_random_article_title())
         
         return article_title, article_text
-    
-    def filter_article():
-        ...
         
 
 class WikiArticleParser(WikiScrapper, Parameters):
+    
+    filtered_text: str
 
     def __init__(self) -> None:
         super(WikiArticleParser, self).__init__()
         
-        # self.article_text, self.article_title = self.parse_content()
         print(f'Article title:  {self.article_title}')
         print(f'Article content:\n{self.article_text}')
+        
+        print(f'Word list:\n{self.WORDS}')
+        self.filter_article()
+        print(f'Filtered article:\n{self.filtered_text}')
 
     @staticmethod
     def clean_text(text: str, clear_new_lines: bool) -> str:
@@ -116,7 +117,18 @@ class WikiArticleParser(WikiScrapper, Parameters):
     
     def filter_article(self) -> str:
         
-        print(self.COMMON_WORDS)
+        # article_text_list = [word for ]
+        self.filtered_text = ''
+        
+        for word in self.article_text:
+            if word not in self.WORDS:
+                
+                word = ' '
+                "{:<15}".format(word)
+                
+                word += self.filtered_text
+                
+            else: word+= self.filtered_text
         
       
 if __name__ == "__main__":
