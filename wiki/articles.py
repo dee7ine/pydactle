@@ -6,10 +6,19 @@ import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 from pathlib import Path
-from typing import TypeVar
+from functools import wraps
+from typing import (TypeVar,
+                    Callable,
+                    ParamSpec,
+                    Concatenate,
+                    Any)
 
 
 article_body = TypeVar('article_body', bound=str)
+Param = ParamSpec('Param')
+RetType = TypeVar('RetType')
+OriginalFunc = Callable[Param, RetType]
+DecoratedFunc = Callable[Concatenate[str, Param], RetType]
 
 API_URL = "https://en.wikipedia.org/w/api.php"
 PARAMS = {
@@ -28,7 +37,7 @@ class Parameters:
     COMMON_WORDS: list[str] = ['the', 'at', 'there', 'some', 'my',
                     'of', 'be', 'use', 'her', 'than',
                     'and', 'this','an'	,'would','first',
-                    'a'	,'have'	,'each'	,'make'	,'water',
+                    'a'	,'have'	,'each'	,'make'	,'were',
                     'to','from'	,'which','like'	,'been',
                     'in','or', 'do', 'into', 'who', 'how',		
                     'that', 'by', 'if', 'but', 'will', 'not',
@@ -37,7 +46,8 @@ class Parameters:
                     'then', 'no', 'may', 'so', 'such', 'despite', 
                     'beneath', 'now', 'during', 'after', 'was', 
                     'because', 'unlike', 'unless', 'through',
-                    'onto', 'when', 'unto', 'beyond', 'off', 'were']
+                    'onto', 'when', 'unto', 'beyond', 'off',
+                    'since', 'along', 'against']
     
     COMMON_WORDS_UPPERCASE: list[str] = [word.upper() for word in COMMON_WORDS]
     COMMON_WORDS_CAPITAL: list[str] = [word.capitalize() for word in COMMON_WORDS]
@@ -74,7 +84,7 @@ class WikiScrapper:
             titles.close()
             
             return title 
-        
+    
     @staticmethod
     def _get_article_text(title: str) -> str:
         
@@ -83,14 +93,13 @@ class WikiScrapper:
         
         return text_content
         
-    
     def _parse_content(self) -> tuple[str, str]:
         
         article_title = self._get_random_article_title()
         article_text = self._get_article_text(title=article_title)
         
         return article_title, article_text
-        
+
 
 class WikiArticleParser(WikiScrapper, Parameters):
     
@@ -128,6 +137,20 @@ class WikiArticleParser(WikiScrapper, Parameters):
                 word += self.filtered_text
                 
             else: word+= self.filtered_text
+            
+            
+def retry(self, ExceptionToCheck: Exception, m_tries: int, m_delay: float) -> Callable[[OriginalFunc], DecoratedFunc]:
+    def decorator(f: OriginalFunc) -> DecoratedFunc:
+        @wraps(f)
+        def wrapper(*args, **kwargs) -> RetType:
+            try: 
+                f(*args, **kwargs)
+            except Exception as e:
+                while m_tries > 0:
+                    f(*args, **kwargs)
+                    max_tries -= 1
+            return wrapper
+        return decorator
         
       
 if __name__ == "__main__":
