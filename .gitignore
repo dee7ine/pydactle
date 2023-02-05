@@ -40,3 +40,9 @@ nosetests.xml
 
 # Virtual environment
 venv
+
+# Other
+.idea/
+.vscode/
+.tempCodeRunnerFile.py
+tests/tempCodeRunerFile.py
