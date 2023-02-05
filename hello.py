@@ -15,7 +15,7 @@ moment = Moment(app)
 def index() -> str:
     # user_agent = request.headers.get('User-Agent')
     # return '<p>Your browser is %s</p>' % user_agent
-    return render_template('base.html')
+    return render_template('index.html')
 
 @app.route('/user/<name>')
 def user(name: str) -> str:
