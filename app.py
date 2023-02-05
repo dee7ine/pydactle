@@ -6,20 +6,24 @@ import numpy as np
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 
+from wiki.articles import WikiArticleParser
 
 app = Flask(__name__) 
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
+parser = WikiArticleParser()
+article_title, article_text = parser.get_content()
+
 @app.route('/')
 def index() -> str:
     # user_agent = request.headers.get('User-Agent')
     # return '<p>Your browser is %s</p>' % user_agent
-    return render_template('index.html')
+    return render_template('index_test.html', title=article_title, content=article_text)
 
 @app.route('/user/<name>')
 def user(name: str) -> str:
-    return render_template('user.html', name=name)
+    return render_template('user.html', name=name, content=f'{article_title}\n{article_text}')
 
 @app.route('/settings')
 def settings() -> str:

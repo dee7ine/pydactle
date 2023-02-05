@@ -108,12 +108,11 @@ class WikiArticleParser(WikiScrapper, Parameters):
     def __init__(self) -> None:
         super(WikiArticleParser, self).__init__()
         
-        print(f'Article title:  {self.article_title}')
-        print(f'Article content:\n{self.article_text}')
+        # print(f'Article title:  {self.article_title}')
+        # print(f'Article content:\n{self.article_text}')
         
-        print(f'Word list:\n{self.WORDS}')
-        self.filter_article()
-        print(f'Filtered article:\n{self.filtered_text}')
+        # self.filter_article()
+        # print(f'Filtered article:\n{self.filtered_text}')
 
     @staticmethod
     def clean_text(text: str, clear_new_lines: bool) -> str:
@@ -138,6 +137,8 @@ class WikiArticleParser(WikiScrapper, Parameters):
                 
             else: word+= self.filtered_text
             
+    def get_content(self) -> tuple[str, str]:
+        return self.article_title, self.article_text
             
 def retry(self, ExceptionToCheck: Exception, m_tries: int, m_delay: float) -> Callable[[OriginalFunc], DecoratedFunc]:
     def decorator(f: OriginalFunc) -> DecoratedFunc:
