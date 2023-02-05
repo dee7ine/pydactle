@@ -107,12 +107,6 @@ class WikiArticleParser(WikiScrapper, Parameters):
 
     def __init__(self) -> None:
         super(WikiArticleParser, self).__init__()
-        
-        # print(f'Article title:  {self.article_title}')
-        # print(f'Article content:\n{self.article_text}')
-        
-        # self.filter_article()
-        # print(f'Filtered article:\n{self.filtered_text}')
 
     @staticmethod
     def clean_text(text: str, clear_new_lines: bool) -> str:
@@ -124,7 +118,6 @@ class WikiArticleParser(WikiScrapper, Parameters):
     
     def filter_article(self) -> str:
         
-        # article_text_list = [word for ]
         self.filtered_text = ''
         
         for word in self.article_text:
