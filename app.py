@@ -1,5 +1,8 @@
 import __future__
 
+__version__ = '0.1'
+__author__ = 'Bartlomiej Jargut'
+
 from flask import Flask, Response, redirect, render_template
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
@@ -19,6 +22,7 @@ moment = Moment(app)
 
 parser = WikiArticleParser()
 article_title, article_text = parser.get_content()
+
 
 @app.route('/')
 def index() -> HTML_TEMPLATE:
