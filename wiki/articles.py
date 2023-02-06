@@ -5,10 +5,7 @@ __author__ = 'Bartlomiej Jargut'
 
 import requests
 import wikipedia
-from wikipedia.exceptions import (DisambiguationError,
-                                  HTTPTimeoutError,
-                                  PageError,
-                                  RedirectError)
+from wikipedia.exceptions import PageError
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime

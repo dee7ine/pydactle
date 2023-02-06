@@ -131,6 +131,10 @@ class Titles:
     
     BUSINESS_PEOPLE = ['Henry Ford']
     
+    PEOPLE = LEADERS_AND_POLITICIANS + RELIGIOUS_FIGURES + EXPLORERS + \
+            PHILOSOPHERS_AND_SOCIAL_SCIENTISTS + WRITERS + ARTISTS + \
+            MUSICIANS_AND_COMPOSERS + SCIENTISTS_AND_INVENTORS + MATHEMATICIANS + FILMMAKERS
+    
     """
     HISTORY
     """
@@ -224,6 +228,9 @@ class Titles:
                     'Cold War',
                     'Green Revolution',
                     'Information Age']
+    
+    HISTORY = GENERAL_HISTORY + HISTORY_BY_REGION + HISTORY_BY_SUBJECT + PREHISTORY + \
+        ANCIENT_HISTORY + POST_CLASSICAL_HISTORY + MODERN_HISTORY
     
     """
     GEOGRAPHY
@@ -358,6 +365,9 @@ class Titles:
             'South America',
             'São Paulo']
     
+    GEOGRAPHY = GENERAL_GEOGRAPHY + CONTINENTS_AND_REGIONS + TERRESTIAL_FEATURES + \
+        HYDROLOGICAL_FEATURES + COUNTRIES + CITIES
+    
     """
     ARTS
     """
@@ -456,6 +466,9 @@ class Titles:
                 'Secularism',
                 'Atheism']
     
+    PHILOSOPHY_AND_RELIGION = GENERAL_PHILOSOPHY + PHILOSOPHICAL_BRANCHES_AND_CONCEPTS + \
+        PHILOSOPHY_BY_REGION_AND_PERIOD + MYTHOLOGY + RELIGION
+        
     """
     SPECIFIC RELIGIONS
     """
@@ -486,6 +499,8 @@ class Titles:
                         'Sikhism']
     
     OTHER_RELIGIONS = ['Traditional African religions']
+    
+    RELIGIONS = ABRAHAMIC_RELIGIONS + EAST_ASIAN_RELIGIONS + INDIAN_RELIGIONS + OTHER_RELIGIONS
     
     """
     EVERYDAY LIFE
@@ -552,6 +567,9 @@ class Titles:
                                     'Martial arts',
                                     'Swimming',
                                     'Tourism'] 
+    
+    EVERYDAY_LIFE = EVERYDAY_LIFE_GENERAL + FAMILY_AND_KINSHIP + SEXUALITY_AND_GENDER + \
+        FOOD_AND_DRINK + RECREATION_AND_ENTERTAINMENT
     
     """
     SOCIETY AND SOCIAL SCIENCES
@@ -715,6 +733,9 @@ class Titles:
             'News',
             'Publishing']
     
+    SOCIETY_AND_SOCIAL_SCIENCES = GENERAL_SOCIETY_AND_SOCIAL_SCIENCES + POLITICS_AND_GOVERNMENT + CONFLICT + \
+        EDUCATION + BUSINESS + SOCIAL_ISSUES + LAW + PSYCHOLOGY + LANGUAGE
+    
     """
     HEALTH MEDICINE AND DISEASE
     """
@@ -762,6 +783,8 @@ class Titles:
                             'Addiction',
                             'Alcoholism',
                             'Smoking']
+    
+    HEALTH_MEDICINE_AND_DISEASE = ILLNESS_AND_INJURY + HEALTH_FITNESS_AND_MEDICINE + DRUGS_AND_MEDICATION
     
     """
     SCIENCE
@@ -982,6 +1005,8 @@ class Titles:
                     'Soil',
                     'Volcano']
     
+    SCIENCE = GENERAL_SCIENCE + ASTRONOMY + PHYSICS + BIOLOGY + CHEMISTRY + EARTH_SCIENCE
+    
     """
     TECHNOLOGY
     """
@@ -1099,6 +1124,11 @@ class Titles:
             'Microscope',
             'Telescope']
     
+    TECHNOLOGY = GENERAL_TECHNOLOGY + ENERGY + FOOD_AND_HEALTH + WEAPONS + \
+        TOOLS_AND_MACHINERY + MEDIA_AND_COMMUNICATION + COMPUTING_AND_INFORMATION_TECHNOLOGY + \
+            ELECTRONICS + SPACE + TRANSPORTATION + NAVIGATION_AND_TIMEKEEPING + STRUCTURES + \
+                MATERIALS + OPTICAL
+    
     """
     MATHEMATICS 
     """
@@ -1154,6 +1184,83 @@ class Titles:
     
     PROBABILITY_AND_STATISTICS = ['Probability',
                                 'Statistics ']
+    
+    MATHEMATICS = GENERAL_MATHEMATICS + COUNTING_AND_NUMBERS + ALGEBRA + ANALYSIS + \
+        ARITHMETIC + GEOMETRY_AND_TOPOLOGY + PROBABILITY_AND_STATISTICS
+        
+    """
+    COMBINED
+    """
+    
+    ALL_TITLES = PEOPLE + HISTORY + GEOGRAPHY + ARTS + PHILOSOPHY_AND_RELIGION + RELIGIONS + \
+        EVERYDAY_LIFE + SOCIETY_AND_SOCIAL_SCIENCES + HEALTH_MEDICINE_AND_DISEASE + SCIENCE + \
+            TECHNOLOGY + MATHEMATICS
+    
+    @classmethod
+    @property   
+    def people(cls) -> list[str]:
+        return cls.PEOPLE
+    
+    @classmethod
+    @property   
+    def history(cls) -> list[str]:
+        return cls.HISTORY
+    
+    @classmethod
+    @property   
+    def geography(cls) -> list[str]:
+        return cls.GEOGRAPHY
+    
+    @classmethod
+    @property   
+    def arts(cls) -> list[str]:
+        return cls.ARTS
+    
+    @classmethod
+    @property   
+    def philosophy_and_religion(cls) -> list[str]:
+        return cls.PHILOSOPHY_AND_RELIGION
+    
+    @classmethod
+    @property   
+    def religions(cls) -> list[str]:
+        return cls.RELIGIONS
+    
+    @classmethod
+    @property   
+    def everyday_life(cls):
+        return cls.EVERYDAY_LIFE
+    
+    @classmethod
+    @property   
+    def society_and_social_sciences(cls):
+        return cls.SOCIETY_AND_SOCIAL_SCIENCES
+    
+    @classmethod
+    @property   
+    def health_medicine_and_disease(cls):
+        return cls.HEALTH_MEDICINE_AND_DISEASE
+    
+    @classmethod
+    @property   
+    def science(cls):
+        return cls.SCIENCE
+    
+    @classmethod
+    @property   
+    def technology(cls):
+        return cls.TECHNOLOGY
+    
+    @classmethod
+    @property   
+    def mathematics(cls):
+        return cls.MATHEMATICS
+
+    @classmethod
+    @property   
+    def all_titles(self):
+        return self.ALL_TITLES
+    
 
 if __name__ == "__main__":
     
