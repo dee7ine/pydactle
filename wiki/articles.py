@@ -20,10 +20,12 @@ from typing import (TypeVar,
                     Concatenate,
                     Any)
 
-from wiki.titles import Titles
+try:
+    from titles import Titles
+except ImportError:
+    from wiki.titles import Titles
 
-
-article_body = TypeVar('article_body', bound=str)
+ArticleBody = TypeVar('ArticleBody', bound=str)
 Param = ParamSpec('Param')
 RetType = TypeVar('RetType')
 OriginalFunc = Callable[Param, RetType]
@@ -120,8 +122,11 @@ class WikiScrapper:
         
     def _parse_content(self) -> tuple[str, str]:
         
-        article_title = self.get_random_article_title()
-        article_text = self.get_article_text(title=article_title)
+        try:
+            article_title = self.get_random_article_title()
+            article_text = self.get_article_text(title=article_title)
+        except PageError:
+            ...
         
         return article_title, article_text
 
@@ -175,5 +180,5 @@ def retry(self, ExceptionToCheck: Exception, m_tries: int, m_delay: float) -> Ca
 if __name__ == "__main__":
     
     article_parser = WikiArticleParser()
-    article_parser.get_article_text('Prehistory', print_content=True)
+    article_parser.get_article_text('Nth root', print_content=True)
     

@@ -1,6 +1,10 @@
 class Titles:
     
     """
+    Class containing titles of Wikipedia level 3 vital articles
+    """
+    
+    """
     PEOPLE
     """
     
@@ -411,12 +415,13 @@ class Titles:
                 'Pottery',
                 'Sculpture']
     
+    ARTS = GENERAL_ARTS + ARTISTIC_MOVEMENTS + ARCHITECTURE + LITERATURE + MUSIC + PERFORMING_ARTS + VISUAL_ARTS
+    
     """
     PHILOSOPHY AND RELIGION
     """
     
-    GENERAL_PHILOSOPHY = ['Philosophy ',
-'Philosophy of science']
+    GENERAL_PHILOSOPHY = ['Philosophy ', 'Philosophy of science']
     
     PHILOSOPHICAL_BRANCHES_AND_CONCEPTS = ['Aesthetics',
                                         'Epistemology',
