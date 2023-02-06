@@ -1,7 +1,14 @@
 from __future__ import annotations
 
+__version__ = '0.1'
+__author__ = 'Bartlomiej Jargut'
+
 import requests
 import wikipedia
+from wikipedia.exceptions import (DisambiguationError,
+                                  HTTPTimeoutError,
+                                  PageError,
+                                  RedirectError)
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -12,6 +19,8 @@ from typing import (TypeVar,
                     ParamSpec,
                     Concatenate,
                     Any)
+
+from wiki.titles import Titles
 
 
 article_body = TypeVar('article_body', bound=str)
@@ -73,8 +82,14 @@ class WikiScrapper:
         print(page)
 
     @staticmethod
-    def _get_random_article_title() -> str:
+    def get_random_article_title() -> str:
         with open('titles_temp.txt', 'a') as titles:
+            """
+            TODO
+            
+            ADD EXCEPTION HANDLING FOR 
+            NON-EXISTING ARTICLE ERROR
+            """
         
             url = requests.get('https://en.wikipedia.org/wiki/Special:Random')
             soup = BeautifulSoup(url.content, 'html.parser')
@@ -86,22 +101,32 @@ class WikiScrapper:
             return title 
     
     @staticmethod
-    def _get_article_text(title: str) -> str:
+    def get_article_text(title: str, print_content: bool = False) -> str:
+        
+        
+        """
+        TODO
+        
+        Test random article method with 
+        list of articles
+        """
         
         wiki = wikipedia.page(title)  # 'Belgian Ship A4'
         text_content = wiki.content
+        
+        if print_content: print(text_content)
         
         return text_content
         
     def _parse_content(self) -> tuple[str, str]:
         
-        article_title = self._get_random_article_title()
-        article_text = self._get_article_text(title=article_title)
+        article_title = self.get_random_article_title()
+        article_text = self.get_article_text(title=article_title)
         
         return article_title, article_text
 
 
-class WikiArticleParser(WikiScrapper, Parameters):
+class WikiArticleParser(WikiScrapper, Titles, Parameters):
     
     filtered_text: str
 
@@ -150,4 +175,5 @@ def retry(self, ExceptionToCheck: Exception, m_tries: int, m_delay: float) -> Ca
 if __name__ == "__main__":
     
     article_parser = WikiArticleParser()
+    article_parser.get_article_text('Prehistory', print_content=True)
     
