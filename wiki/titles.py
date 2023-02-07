@@ -2,6 +2,8 @@ class Titles:
     
     """
     Class containing titles of Wikipedia level 3 vital articles
+    Source: https://en.wikipedia.org/wiki/Wikipedia:Vital_articles
+    
     """
     
     """
