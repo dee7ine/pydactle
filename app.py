@@ -3,7 +3,7 @@ import __future__
 __version__ = '0.1'
 __author__ = 'Bartlomiej Jargut'
 
-from flask import Flask, Response, redirect, render_template
+from flask import Flask, Response, redirect, render_template, request
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
@@ -26,7 +26,12 @@ article_title, article_text = parser.get_content()
 
 @app.route('/')
 def index() -> HTML_TEMPLATE:
-    return render_template('index_test.html', title=article_title, content=article_text)
+    return render_template('index.html', title=article_title, content=article_text)
+
+@app.route('/', methods=['POST'])
+def get_guess() -> str:
+    text = request.form['text']
+    return text
 
 @app.route('/user/<name>')
 def user(name: str) -> HTML_TEMPLATE:
