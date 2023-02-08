@@ -16,6 +16,7 @@ from typing import (TypeVar,
                     ParamSpec,
                     Concatenate,
                     Any)
+import random
 
 try:
     from titles import Titles
@@ -177,5 +178,8 @@ def retry(self, ExceptionToCheck: Exception, m_tries: int, m_delay: float) -> Ca
 if __name__ == "__main__":
     
     article_parser = WikiArticleParser()
-    article_parser.get_article_text('Nth root', print_content=True)
+    titles_list = Titles.all_titles
+    
+    
+    article_parser.get_article_text(random.choice(titles_list), print_content=True)
     
