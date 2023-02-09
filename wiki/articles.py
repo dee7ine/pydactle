@@ -29,6 +29,14 @@ RetType = TypeVar('RetType')
 OriginalFunc = Callable[Param, RetType]
 DecoratedFunc = Callable[Concatenate[str, Param], RetType]
 
+"""
+TODO
+-----------
+Fix class hierarchy
+Resolve class dependancy
+
+"""
+
 API_URL = "https://en.wikipedia.org/w/api.php"
 PARAMS = {
     "action": "query",
@@ -66,17 +74,17 @@ class Parameters:
     WORDS = COMMON_WORDS + COMMON_WORDS_UPPERCASE + COMMON_WORDS_CAPITAL + SEPARATORS
 
  
-class WikiScrapper:
+class BaseWikiScrapper:
     
     article_title: str
     article_text: str
     
     def __init__(self) -> None:
         
-        self.article_title, self.article_text  = self._parse_content()
+        self.article_title, self.article_text  = self.parse_content()
     
     @DeprecationWarning
-    def _random_article(self) -> None:
+    def random_article(self) -> None:
         
         page = requests.get("https://en.wikipedia.org/api/rest_v1/page/random/summary").json()
         print(page)
@@ -118,7 +126,7 @@ class WikiScrapper:
         
         return text_content
         
-    def _parse_content(self) -> tuple[str, str]:
+    def parse_content(self) -> tuple[str, str]:
         
         try:
             article_title = self.get_random_article_title()
@@ -129,7 +137,7 @@ class WikiScrapper:
         return article_title, article_text
 
 
-class WikiArticleParser(WikiScrapper, Titles, Parameters):
+class WikiArticleParser(BaseWikiScrapper):
     
     filtered_text: str
 
@@ -177,9 +185,9 @@ def retry(self, ExceptionToCheck: Exception, m_tries: int, m_delay: float) -> Ca
       
 if __name__ == "__main__":
     
-    article_parser = WikiArticleParser()
+    parser = WikiArticleParser()
     titles_list = Titles.all_titles
     
     
-    article_parser.get_article_text(random.choice(titles_list), print_content=True)
+    parser.get_article_text(random.choice(titles_list), print_content=True)
     
