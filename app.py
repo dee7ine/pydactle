@@ -8,9 +8,11 @@ from flask_script import Manager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 
+import random
 from typing import NewType
 
 from wiki.articles import WikiArticleParser
+from wiki.titles import Titles
 
 
 HTML_TEMPLATE = NewType('HTML_TEMPLATE', 'str')
@@ -21,7 +23,9 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 
 parser = WikiArticleParser()
-article_title, article_text = parser.get_content()
+titles_list = Titles.all_titles
+article_title = random.choice(titles_list)
+article_text = parser.get_article_text(article_title, print_content=True)
 
 
 @app.route('/')
