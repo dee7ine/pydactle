@@ -5,7 +5,7 @@ __author__ = 'Bartlomiej Jargut'
 
 import requests
 import wikipedia
-from wikipedia.exceptions import PageError
+from wikipedia.exceptions import PageError, DisambiguationError
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -17,11 +17,13 @@ from typing import (TypeVar,
                     Concatenate,
                     Any)
 import random
+import time
 
 try:
     from titles import Titles
 except ImportError:
     from wiki.titles import Titles
+from utilities import retry
 
 ArticleBody = TypeVar('ArticleBody', bound=str)
 Param = ParamSpec('Param')
@@ -33,8 +35,8 @@ DecoratedFunc = Callable[Concatenate[str, Param], RetType]
 TODO
 -----------
 Fix class hierarchy
-Resolve class dependancy
-
+Resolve class dependency
+Fix disambiguation error
 """
 
 API_URL = "https://en.wikipedia.org/w/api.php"
@@ -53,10 +55,10 @@ class Parameters:
     
     COMMON_WORDS: list[str] = ['the', 'at', 'there', 'some', 'my',
                     'of', 'be', 'use', 'her', 'than',
-                    'and', 'this','an'	,'would','first',
-                    'a'	,'have'	,'each'	,'make'	,'were',
-                    'to','from'	,'which','like'	,'been',
-                    'in','or', 'do', 'into', 'who', 'how',		
+                    'and', 'this', 'an', 'would', 'first',
+                    'a', 'have', 'each', 'make', 'were',
+                    'to', 'from', 'which','like', 'been',
+                    'in', 'or', 'do', 'into', 'who', 'how',		
                     'that', 'by', 'if', 'but', 'will', 'not',
                     'up', 'other', 'what', 'more', 'for', 'on',
                     'all', 'about', 'go', 'out', 'as', 'with',
@@ -71,7 +73,7 @@ class Parameters:
     
     SEPARATORS: list[str] = [' ', '-', '.', ',', '(', ')', '[', ']', ':', '\n', '\t']
     
-    WORDS = COMMON_WORDS + COMMON_WORDS_UPPERCASE + COMMON_WORDS_CAPITAL + SEPARATORS
+    WORDS: list[str] = COMMON_WORDS + COMMON_WORDS_UPPERCASE + COMMON_WORDS_CAPITAL + SEPARATORS
 
  
 class BaseWikiScrapper:
@@ -82,12 +84,6 @@ class BaseWikiScrapper:
     def __init__(self) -> None:
         
         self.article_title, self.article_text  = self.parse_content()
-    
-    @DeprecationWarning
-    def random_article(self) -> None:
-        
-        page = requests.get("https://en.wikipedia.org/api/rest_v1/page/random/summary").json()
-        print(page)
 
     @staticmethod
     def get_random_article_title() -> str:
@@ -104,13 +100,11 @@ class BaseWikiScrapper:
             title = soup.find(class_='firstHeading').text
             
             titles.write(datetime.today().strftime('%Y-%m-%d') + f' {title}' + '\n')
-            titles.close()
             
             return title 
     
     @staticmethod
     def get_article_text(title: str, print_content: bool = False) -> str:
-        
         
         """
         TODO
@@ -125,19 +119,17 @@ class BaseWikiScrapper:
         if print_content: print(text_content)
         
         return text_content
-        
+    
+    @retry(ExceptionsToCheck=(PageError, DisambiguationError), tries=4)  
     def parse_content(self) -> tuple[str, str]:
         
-        try:
-            article_title = self.get_random_article_title()
-            article_text = self.get_article_text(title=article_title)
-        except PageError:
-            ...
+        article_title = self.get_random_article_title()
+        article_text = self.get_article_text(title=article_title)
         
         return article_title, article_text
 
 
-class WikiArticleParser(BaseWikiScrapper):
+class WikiArticleParser(BaseWikiScrapper, Parameters):
     
     filtered_text: str
 
@@ -152,7 +144,7 @@ class WikiArticleParser(BaseWikiScrapper):
         
         return text
     
-    def filter_article(self) -> str:
+    def filter_article(self) -> None:
         
         self.filtered_text = ''
         
@@ -164,25 +156,11 @@ class WikiArticleParser(BaseWikiScrapper):
                 
                 word += self.filtered_text
                 
-            else: word+= self.filtered_text
+            else: word += self.filtered_text
             
     def get_content(self) -> tuple[str, str]:
         return self.article_title, self.article_text
-            
-def retry(self, ExceptionToCheck: Exception, m_tries: int, m_delay: float) -> Callable[[OriginalFunc], DecoratedFunc]:
-    def decorator(f: OriginalFunc) -> DecoratedFunc:
-        @wraps(f)
-        def wrapper(*args, **kwargs) -> RetType:
-            try: 
-                f(*args, **kwargs)
-            except Exception as e:
-                while m_tries > 0:
-                    f(*args, **kwargs)
-                    max_tries -= 1
-            return wrapper
-        return decorator
-        
-      
+             
 if __name__ == "__main__":
     
     parser = WikiArticleParser()
