@@ -10,20 +10,21 @@ import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 from pathlib import Path
-from functools import wraps
 from typing import (TypeVar,
                     Callable,
                     ParamSpec,
-                    Concatenate,
-                    Any)
+                    Concatenate)
 import random
-import time
+import logging
+
+logger = logging.BASIC_FORMAT
 
 try:
     from titles import Titles
+    from utilities import retry
 except ImportError:
     from wiki.titles import Titles
-from utilities import retry
+    from wiki.utilities import retry
 
 ArticleBody = TypeVar('ArticleBody', bound=str)
 Param = ParamSpec('Param')
@@ -51,13 +52,14 @@ PROJECT_NAME = 'pydactle'
 CURRENT_DIR = Path(__file__)
 SOURCE_ROOT = [p for p in CURRENT_DIR.parents if p.parts[-1] == PROJECT_NAME][0]
 
+
 class Parameters:
     
     COMMON_WORDS: list[str] = ['the', 'at', 'there', 'some', 'my',
                     'of', 'be', 'use', 'her', 'than',
                     'and', 'this', 'an', 'would', 'first',
                     'a', 'have', 'each', 'make', 'were',
-                    'to', 'from', 'which','like', 'been',
+                    'to', 'from', 'which', 'like', 'been',
                     'in', 'or', 'do', 'into', 'who', 'how',		
                     'that', 'by', 'if', 'but', 'will', 'not',
                     'up', 'other', 'what', 'more', 'for', 'on',
@@ -83,7 +85,7 @@ class BaseWikiScrapper:
     
     def __init__(self) -> None:
         
-        self.article_title, self.article_text  = self.parse_content()
+        self.article_title, self.article_text = self.parse_content()
 
     @staticmethod
     def get_random_article_title() -> str:
@@ -116,11 +118,12 @@ class BaseWikiScrapper:
         wiki = wikipedia.page(title)  # 'Belgian Ship A4'
         text_content = wiki.content
         
-        if print_content: print(text_content)
+        if print_content:
+            print(text_content)
         
         return text_content
     
-    @retry(ExceptionsToCheck=(PageError, DisambiguationError), tries=4)  
+    @retry(ExceptionsToCheck=[PageError, DisambiguationError], tries=4)  
     def parse_content(self) -> tuple[str, str]:
         
         article_title = self.get_random_article_title()
@@ -140,7 +143,8 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
     def clean_text(text: str, clear_new_lines: bool) -> str:
         
         text = re.sub(r'==.*?==+', '', text)
-        if clear_new_lines: text = text.replace('\n', '')
+        if clear_new_lines:
+            text = text.replace('\n', '')
         
         return text
     
@@ -153,19 +157,19 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
                 
                 word = ' '
                 "{:<15}".format(word)
-                
                 word += self.filtered_text
                 
-            else: word += self.filtered_text
+            else:
+                word += self.filtered_text
             
     def get_content(self) -> tuple[str, str]:
         return self.article_title, self.article_text
+
              
 if __name__ == "__main__":
     
     parser = WikiArticleParser()
     titles_list = Titles.all_titles
-    
-    
+
     parser.get_article_text(random.choice(titles_list), print_content=True)
     

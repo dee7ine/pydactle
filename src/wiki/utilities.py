@@ -1,13 +1,14 @@
 from functools import wraps
 import time
 
+
 def retry(ExceptionsToCheck: tuple, tries=4, delay=3, backoff=2, logger=None):
     """Retry calling the decorated function using an exponential backoff.
     http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/
     original from: http://wiki.python.org/moin/PythonDecoratorLibrary#Retry
-    :param ExceptionToCheck: the exception to check. may be a tuple of
+    :param ExceptionsToCheck: the exception to check. may be a tuple of
         exceptions to check
-    :type ExceptionToCheck: Exception or tuple
+    :type ExceptionsToCheck: Exception or tuple
     :param tries: number of times to try (not retry) before giving up
     :type tries: int
     :param delay: initial delay between retries in seconds
