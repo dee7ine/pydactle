@@ -1,0 +1,34 @@
+[pydactle]
+name = "pydactle"
+
+version = "0.1.0"
+
+description = "A Redactle clone written in Python"
+
+license = "MIT"
+
+authors = [
+    "Bartłomiej Jargut <dee7ine@gmail.com>,
+]
+
+maintainers = [
+    "Bartłomiej Jargut <dee7ine@gmail.com>,
+]
+
+readme = "README.md"
+
+homepage = ""
+
+repository = "https://github.com/dee7ine/pydactle"
+
+documentation = ""
+
+keywords = ["Pydactle", "Python"]
+
+dependecies = [
+    "flask",
+    "requests",
+    "beautifulsoup",
+    "wikipedia"
+]
+

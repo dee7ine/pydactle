@@ -15,6 +15,9 @@ from typing import (TypeVar,
                     ParamSpec,
                     Concatenate)
 import random
+import logging
+
+logger = logging.BASIC_FORMAT
 
 try:
     from titles import Titles
@@ -154,7 +157,6 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
                 
                 word = ' '
                 "{:<15}".format(word)
-                
                 word += self.filtered_text
                 
             else:
