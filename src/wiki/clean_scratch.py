@@ -1,7 +1,6 @@
 import string
 
-LETTERS = string.ascii_lowercase
-LETTERS = list(LETTERS)
+LETTERS = list(string.ascii_lowercase)
 
 
 def clean() -> None:

@@ -1,4 +1,4 @@
-from __future__ import annotations
+from __future__ import annotations, absolute_import
 
 __version__ = '0.1'
 __author__ = 'Bartlomiej Jargut'
@@ -17,13 +17,15 @@ from typing import (TypeVar,
 import random
 import logging
 
-logger = logging.BASIC_FORMAT
+logging.basicConfig()
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 try:
-    from titles import Titles
+    import titles
     from utilities import retry
 except ImportError:
-    from wiki.titles import Titles
+    import wiki.titles
     from wiki.utilities import retry
 
 ArticleBody = TypeVar('ArticleBody', bound=str)
@@ -85,7 +87,10 @@ class BaseWikiScrapper:
     
     def __init__(self) -> None:
         
+        logger.info(f'Initializing BaseWikiScrapper')
+        logger.info(f'Parsing article content')
         self.article_title, self.article_text = self.parse_content()
+        logger.info('Succesfully parsed article content')
 
     @staticmethod
     def get_random_article_title() -> str:
@@ -168,8 +173,10 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
              
 if __name__ == "__main__":
     
-    parser = WikiArticleParser()
-    titles_list = Titles.all_titles
+    print(titles.LEADERS_AND_POLITICIANS)
+    
+    # parser = WikiArticleParser()
+    # titles_list = Titles.all_titles
 
-    parser.get_article_text(random.choice(titles_list), print_content=True)
+    # parser.get_article_text(random.choice(titles_list), print_content=True)
     
