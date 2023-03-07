@@ -12,7 +12,7 @@ import random
 from typing import NewType
 
 from wiki.articles import WikiArticleParser
-from wiki.titles import Titles
+import wiki.titles
 
 
 app = Flask(__name__) 
@@ -20,7 +20,7 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 
 parser = WikiArticleParser()
-article_title: str = random.choice(Titles.all_titles)
+article_title: str = random.choice(wiki.titles.ALL_TITLES)
 article_text = parser.get_article_text(article_title, print_content=True)
 
 
