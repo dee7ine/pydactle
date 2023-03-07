@@ -17,10 +17,6 @@ from typing import (TypeVar,
 import random
 import logging
 
-logging.basicConfig()
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
 try:
     import titles
     from utilities import retry
@@ -28,11 +24,16 @@ except ImportError:
     import wiki.titles
     from wiki.utilities import retry
 
+
 ArticleBody = TypeVar('ArticleBody', bound=str)
 Param = ParamSpec('Param')
 RetType = TypeVar('RetType')
 OriginalFunc = Callable[Param, RetType]
 DecoratedFunc = Callable[Concatenate[str, Param], RetType]
+
+logging.basicConfig()
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 """
 TODO
@@ -173,10 +174,8 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
              
 if __name__ == "__main__":
     
-    print(titles.LEADERS_AND_POLITICIANS)
-    
-    # parser = WikiArticleParser()
-    # titles_list = Titles.all_titles
+    parser = WikiArticleParser()
+    titles_list = titles.ALL_TITLES
 
-    # parser.get_article_text(random.choice(titles_list), print_content=True)
+    parser.get_article_text(random.choice(titles_list), print_content=True)
     
