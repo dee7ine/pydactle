@@ -1,3 +1,4 @@
+#!.\venv\Scripts\python.exe
 from __future__ import annotations
 
 __version__ = '0.1'

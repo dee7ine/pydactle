@@ -1,3 +1,4 @@
+#!.\venv\Scripts\python.exe
 from __future__ import annotations, absolute_import
 
 __version__ = '0.1'
@@ -174,8 +175,9 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
                 
             else:
                 word += self.filtered_text
-            
-    def get_content(self) -> tuple[str, str]:
+    
+    @property     
+    def content(self) -> tuple[str, str]:
         """
         Getter method for article text and title
         """
