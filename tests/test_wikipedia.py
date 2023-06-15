@@ -1,22 +1,23 @@
 import unittest
-from wiki.articles import WikiArticleParser
-from wiki.titles import Titles
+from pydactle.wiki_scraper 
 import random
+
+import sys, os
+sys.path.append(os.path.abspath(os.path.join('..', 'pydactle', 'src')))
 
 
 class TestWikiArticleParser(unittest.TestCase):
 
-    def setup(self) -> tuple[WikiArticleParser, property]:
+    def setup(self) -> tuple[wiki_scraper.articles.WikiArticleParser, list[str]]:
         
-        parser = WikiArticleParser()
-        titles = Titles.all_titles
-        
-        return parser, titles
+        parser = wiki_scraper.articles.WikiArticleParser()
+        title_list = wiki_scraper.titles.ALL_TITLES
+        return parser, title_list
     
     def test_random_article(self) -> None:
-        parser, titles = self.setup()
+        parser, title_list = self.setup()
         
-        parser.get_article_text(random.choice(titles), print_content=True)
+        parser.get_article_text(random.choice(title_list), print_content=True)
 
 
 if __name__ == '__main__':

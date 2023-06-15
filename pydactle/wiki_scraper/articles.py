@@ -1,3 +1,4 @@
+#!.\venv\Scripts\python.exe
 from __future__ import annotations, absolute_import
 
 __version__ = '0.1'
@@ -21,8 +22,8 @@ try:
     import titles
     from utilities import retry
 except ImportError:
-    import wiki.titles
-    from wiki.utilities import retry
+    import wiki_scraper.titles
+    from wiki_scraper.utilities import retry
 
 
 ArticleBody = TypeVar('ArticleBody', bound=str)
@@ -87,7 +88,6 @@ class BaseWikiScrapper:
     article_text: str
     
     def __init__(self) -> None:
-        
         logger.info(f'Initializing BaseWikiScrapper')
         logger.info(f'Parsing article content')
         self.article_title, self.article_text = self.parse_content()
@@ -95,6 +95,9 @@ class BaseWikiScrapper:
 
     @staticmethod
     def get_random_article_title() -> str:
+        """
+        Get title of a random Wikipedia article
+        """
         with open('titles_temp.txt', 'a') as titles:
             """
             TODO
@@ -124,11 +127,12 @@ class BaseWikiScrapper:
         wiki = wikipedia.page(title)  # 'Belgian Ship A4'
         text_content = wiki.content
         
+        
         if print_content:
             print(text_content)
         
-        return text_content
-    
+        return text_content     
+
     @retry(ExceptionsToCheck=[PageError, DisambiguationError], tries=4)  
     def parse_content(self) -> tuple[str, str]:
         
@@ -147,7 +151,9 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
 
     @staticmethod
     def clean_text(text: str, clear_new_lines: bool) -> str:
-        
+        """
+        Cleans HTML formatting from scraped article text
+        """
         text = re.sub(r'==.*?==+', '', text)
         if clear_new_lines:
             text = text.replace('\n', '')
@@ -155,7 +161,9 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
         return text
     
     def filter_article(self) -> None:
-        
+        """
+        Filters common words from article 
+        """
         self.filtered_text = ''
         
         for word in self.article_text:
@@ -167,8 +175,12 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
                 
             else:
                 word += self.filtered_text
-            
-    def get_content(self) -> tuple[str, str]:
+    
+    @property     
+    def content(self) -> tuple[str, str]:
+        """
+        Getter method for article text and title
+        """
         return self.article_title, self.article_text
 
              

@@ -1,18 +1,19 @@
+#!.\venv\Scripts\python.exe
 from __future__ import annotations
 
 __version__ = '0.1'
 __author__ = 'Bartlomiej Jargut'
 
+import random
+
+from wiki_scraper.articles import WikiArticleParser
+import wiki_scraper.titles
+
 from flask import Flask, Response, redirect, render_template, request
-from flask_script import Manager
+# from flask_script import Manager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
-
-import random
-from typing import NewType
-
-from wiki.articles import WikiArticleParser
-import wiki.titles
+#from werkzeug.wrappers import wrappers
 
 
 app = Flask(__name__) 
@@ -20,7 +21,7 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 
 parser = WikiArticleParser()
-article_title: str = random.choice(wiki.titles.ALL_TITLES)
+article_title: str = random.choice(wiki_scraper.titles.ALL_TITLES)
 article_text = parser.get_article_text(article_title, print_content=True)
 
 
@@ -46,7 +47,7 @@ def settings() -> str:
 
 
 @app.route('/redirect')
-def zen_of_python() -> "Response":
+def zen_of_python() -> wrappers.Response:
     return redirect('https://peps.python.org/pep-0020/#the-zen-of-python')
 
 
