@@ -18,12 +18,7 @@ from typing import (TypeVar,
 import random
 import logging
 
-try:
-    import titles
-    from utilities import retry
-except ImportError:
-    import wiki_scraper.titles
-    from wiki_scraper.utilities import retry
+from pydactle import titles, utilities
 
 
 ArticleBody = TypeVar('ArticleBody', bound=str)
@@ -133,7 +128,7 @@ class BaseWikiScrapper:
         
         return text_content     
 
-    @retry(ExceptionsToCheck=[PageError, DisambiguationError], tries=4)  
+    @utilities.retry(ExceptionsToCheck=[PageError, DisambiguationError], tries=4)  
     def parse_content(self) -> tuple[str, str]:
         
         article_title = self.get_random_article_title()

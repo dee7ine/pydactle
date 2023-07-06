@@ -6,8 +6,8 @@ __author__ = 'Bartlomiej Jargut'
 
 import random
 
-from wiki_scraper.articles import WikiArticleParser
-import wiki_scraper.titles
+from pydactle.articles import WikiArticleParser
+from pydactle.titles import ALL_TITLES
 
 from flask import Flask, Response, redirect, render_template, request
 # from flask_script import Manager
@@ -21,7 +21,7 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 
 parser = WikiArticleParser()
-article_title: str = random.choice(wiki_scraper.titles.ALL_TITLES)
+article_title: str = random.choice(ALL_TITLES)
 article_text = parser.get_article_text(article_title, print_content=True)
 
 
@@ -47,7 +47,7 @@ def settings() -> str:
 
 
 @app.route('/redirect')
-def zen_of_python() -> wrappers.Response:
+def zen_of_python():
     return redirect('https://peps.python.org/pep-0020/#the-zen-of-python')
 
 
@@ -55,7 +55,6 @@ def zen_of_python() -> wrappers.Response:
 def page_not_found(e: Exception) -> tuple[str, int]:
     """Handler for Error 404.
     """    
-    
     return render_template('404.html'), 400
 
 
