@@ -4,6 +4,7 @@ from __future__ import annotations, absolute_import
 __version__ = '0.1'
 __author__ = 'Bartlomiej Jargut'
 
+from pydactle import utilities
 import requests
 import wikipedia
 from wikipedia.exceptions import PageError, DisambiguationError
@@ -15,11 +16,7 @@ from typing import (TypeVar,
                     Callable,
                     ParamSpec,
                     Concatenate)
-import random
 import logging
-
-from pydactle import titles, utilities
-
 
 ArticleBody = TypeVar('ArticleBody', bound=str)
 Param = ParamSpec('Param')
@@ -29,7 +26,7 @@ DecoratedFunc = Callable[Concatenate[str, Param], RetType]
 
 logging.basicConfig()
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.WARNING)
 
 """
 TODO
@@ -113,8 +110,7 @@ class BaseWikiScrapper:
     def get_article_text(title: str, print_content: bool = False) -> str:
         
         """
-        TODO
-        
+        TODO 
         Test random article method with 
         list of articles
         """
@@ -122,13 +118,10 @@ class BaseWikiScrapper:
         wiki = wikipedia.page(title)  # 'Belgian Ship A4'
         text_content = wiki.content
         
-        
-        if print_content:
-            print(text_content)
-        
+        if print_content: print(text_content)
         return text_content     
 
-    @utilities.retry(ExceptionsToCheck=[PageError, DisambiguationError], tries=4)  
+    @utilities.retry(ExceptionsToCheck=(PageError, DisambiguationError), tries=4)  
     def parse_content(self) -> tuple[str, str]:
         
         article_title = self.get_random_article_title()
@@ -177,12 +170,4 @@ class WikiArticleParser(BaseWikiScrapper, Parameters):
         Getter method for article text and title
         """
         return self.article_title, self.article_text
-
-             
-if __name__ == "__main__":
-    
-    parser = WikiArticleParser()
-    titles_list = titles.ALL_TITLES
-
-    parser.get_article_text(random.choice(titles_list), print_content=True)
     
