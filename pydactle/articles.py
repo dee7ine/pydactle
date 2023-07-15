@@ -29,7 +29,7 @@ DecoratedFunc = Callable[Concatenate[str, Param], RetType]
 
 logging.basicConfig()
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.WARNING)
 
 """
 TODO
@@ -128,7 +128,7 @@ class BaseWikiScrapper:
         
         return text_content     
 
-    @utilities.retry(ExceptionsToCheck=[PageError, DisambiguationError], tries=4)  
+    @utilities.retry(ExceptionsToCheck=(PageError, DisambiguationError), tries=4)  
     def parse_content(self) -> tuple[str, str]:
         
         article_title = self.get_random_article_title()
