@@ -1,10 +1,6 @@
 import unittest
 from pydactle import articles, utilities, titles
-import random
-
-import sys, os
-# sys.path.append(os.path.abspath(os.path.join('..', 'pydactle', 'src')))
-
+from random import choice
 
 class TestWikiArticleParser(unittest.TestCase):
 
@@ -17,7 +13,7 @@ class TestWikiArticleParser(unittest.TestCase):
     def test_random_article(self):
         parser, title_list = self.setup()
         
-        parser.get_article_text(random.choice(title_list), print_content=True)
+        parser.get_article_text(choice(title_list), print_content=False)
 
 
 if __name__ == '__main__':

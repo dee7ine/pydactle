@@ -2,7 +2,6 @@ from functools import wraps
 from typing import Union
 import time
 
-
 def retry(ExceptionsToCheck: Union[tuple, list], tries=4, delay=3, backoff=2, logger=None):
     """Retry calling the decorated function using an exponential backoff.
     http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/
